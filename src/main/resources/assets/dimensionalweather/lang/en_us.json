@@ -4,5 +4,7 @@
   "dimensionalweather.configuration.section.dimensionalweather.common.toml.title": "Dimensional Weather Configs",
   "dimensionalweather.configuration.oblivionFillRate": "Oblivion fill rate",
   "dimensionalweather.configuration.oblivionEmptyRate": "Oblivion empty rate",
-  "dimensionalweather.configuration.oblivionDamage": "Oblivion damage"
+  "dimensionalweather.configuration.oblivionDamage": "Oblivion damage",
+  "dimensionalweather.configuration.oblivionBarXPos": "Oblivion bar X position",
+  "dimensionalweather.configuration.oblivionBarYPos": "Oblivion bar Y position"
 }

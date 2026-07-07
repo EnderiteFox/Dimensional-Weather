@@ -1,8 +1,11 @@
 package com.enderitefox.dimensionalweather.client.oblivion;
 
 import com.enderitefox.dimensionalweather.DimensionalWeather;
+import com.enderitefox.dimensionalweather.client.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,13 +14,20 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber(modid = DimensionalWeather.MODID, value = Dist.CLIENT)
 public class OblivionChargeBar {
-    private static final int BAR_WIDTH = 6;
-    private static final double BAR_HEIGHT = 0.4;
-    private static final int OUTLINE_WIDTH = 2;
-    private static final int OUTLINE_MARGIN = 2;
+    private static final Identifier BAR_TEXTURE = Identifier.fromNamespaceAndPath(
+        DimensionalWeather.MODID,
+        "textures/gui/oblivion_bar.png"
+    );
+    private static final float BAR_TEXTURE_SCALE = 0.65f;
+    private static final int BAR_TEXTURE_WIDTH = (int) (48 * BAR_TEXTURE_SCALE);
+    private static final int BAR_TEXTURE_HEIGHT = (int) (256 * BAR_TEXTURE_SCALE);
 
-    private static final double X_POSITION = 0.2;
-    private static final double Y_POSITION = 0.5;
+    private static final int BAR_INSIDE_RECT_X = (int) (13 * BAR_TEXTURE_SCALE);
+    private static final int BAR_INSIDE_RECT_WIDTH = (int) (24 * BAR_TEXTURE_SCALE);
+    private static final int BAR_INSIDE_RECT_HEIGHT = (int) (235 * BAR_TEXTURE_SCALE);
+
+    private static final int BAR_TRANSPARENCY = 0xb0 << 24;
+    private static final int BAR_FILL_COLOR = 0x00aa00b6 | BAR_TRANSPARENCY;
 
     @SubscribeEvent
     public static void onGuiRender(RenderGuiEvent.Post event) {
@@ -41,26 +51,31 @@ public class OblivionChargeBar {
         final int guiHeight = graphics.guiHeight();
 
 
-        final int barX = (int) (guiWidth * X_POSITION);
-        final int barY = (int) (guiHeight * Y_POSITION);
-        final int barHeight = (int) (guiHeight * BAR_HEIGHT);
-        final int filledHeight = (int) (barHeight * charge);
-        final int barWidth = BAR_WIDTH;
+        final int barX = (int) (guiWidth * ClientConfig.OBLIVION_BAR_X_POSITION.get());
+        final int barY = (int) (guiHeight * ClientConfig.OBLIVION_BAR_Y_POSITION.get());
+        final int filledHeight = (int) (BAR_INSIDE_RECT_HEIGHT * charge);
 
-        graphics.fill(
-            barX - barWidth / 2,
-            barY - filledHeight  / 2,
-            barX + barWidth / 2,
-            barY + filledHeight / 2,
-            0xFFFFFFFF
+        graphics.blit(
+            RenderPipelines.GUI_TEXTURED,
+            BAR_TEXTURE,
+            barX - BAR_TEXTURE_WIDTH / 2,
+            barY - BAR_TEXTURE_HEIGHT / 2,
+            0,
+            0,
+            BAR_TEXTURE_WIDTH,
+            BAR_TEXTURE_HEIGHT,
+            BAR_TEXTURE_WIDTH,
+            BAR_TEXTURE_HEIGHT,
+            0x00ffffff | BAR_TRANSPARENCY
         );
 
-        graphics.outline(
-            barX - barWidth / 2 - OUTLINE_MARGIN - OUTLINE_WIDTH,
-            barY - barHeight / 2 - OUTLINE_MARGIN - OUTLINE_WIDTH,
-            barWidth + 2 * OUTLINE_MARGIN + 2 * OUTLINE_WIDTH,
-            barHeight + 2 * OUTLINE_MARGIN + 2 * OUTLINE_WIDTH,
-            0xFFFFFFFF
+        final int insideX = barX - BAR_TEXTURE_WIDTH / 2 + BAR_INSIDE_RECT_X;
+        graphics.fill(
+            insideX,
+            barY - filledHeight / 2,
+            insideX + BAR_INSIDE_RECT_WIDTH,
+            barY + filledHeight / 2,
+            BAR_FILL_COLOR
         );
     }
 }

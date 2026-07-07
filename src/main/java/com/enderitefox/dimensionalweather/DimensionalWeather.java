@@ -1,5 +1,6 @@
 package com.enderitefox.dimensionalweather;
 
+import com.enderitefox.dimensionalweather.client.ClientConfig;
 import com.mojang.serialization.Codec;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.*;
@@ -48,6 +49,7 @@ public class DimensionalWeather {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

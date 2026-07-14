@@ -1,11 +1,17 @@
 {
   "dimensionalweather.configuration.title": "Dimensional Weather Configs",
-  "dimensionalweather.configuration.section.dimensionalweather.common.toml": "Dimensional Weather Configs",
-  "dimensionalweather.configuration.section.dimensionalweather.common.toml.title": "Dimensional Weather Configs",
+  "dimensionalweather.configuration.section.dimensionalweather.common.toml": "Dimensional Weather Config",
+  "dimensionalweather.configuration.section.dimensionalweather.common.toml.title": "Dimensional Weather Config",
+  "dimensionalweather.configuration.section.dimensionalweather.client.toml": "Dimensional Weather Client Config",
   "dimensionalweather.configuration.oblivionFillRate": "Oblivion fill rate",
+  "dimensionalweather.configuration.oblivionFillRate.tooltip": "How much the Oblivion charge bar fills every second when you're above the void",
   "dimensionalweather.configuration.oblivionEmptyRate": "Oblivion empty rate",
+  "dimensionalweather.configuration.oblivionEmptyRate.tooltip": "How much the Oblivion charge bar empties every second when you're not above the void",
   "dimensionalweather.configuration.oblivionDamage": "Oblivion damage",
+  "dimensionalweather.configuration.oblivionDamage.tooltip": "The damage per second when the Oblivion charge bar is full",
   "dimensionalweather.configuration.oblivionBarXPos": "Oblivion bar X position",
-  "dimensionalweather.configuration.oblivionBarYPos": "Oblivion bar Y position"
+  "dimensionalweather.configuration.oblivionBarXPos.tooltip": "The X position of the Oblivion bar as a percentage of the screen",
+  "dimensionalweather.configuration.oblivionBarYPos": "Oblivion bar Y position",
+  "dimensionalweather.configuration.oblivionBarYPos.tooltip": "The Y position of the Oblivion bar as a percentage of the screen",
   "death.attack.dimensionalweather.oblivion": "%1$s was obliterated"
 }

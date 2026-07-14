@@ -1,9 +1,12 @@
 package com.enderitefox.dimensionalweather.client.oblivion;
 
+import com.enderitefox.dimensionalweather.Config;
 import com.enderitefox.dimensionalweather.DimensionalWeather;
 import com.enderitefox.dimensionalweather.client.ClientConfig;
+import com.enderitefox.dimensionalweather.weather.OblivionWeather;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +29,26 @@ public class OblivionChargeBar {
     private static final int BAR_INSIDE_RECT_WIDTH = (int) (24 * BAR_TEXTURE_SCALE);
     private static final int BAR_INSIDE_RECT_HEIGHT = (int) (235 * BAR_TEXTURE_SCALE);
 
-    private static final int BAR_TRANSPARENCY = 0xb0 << 24;
-    private static final int BAR_FILL_COLOR = 0x00aa00b6 | BAR_TRANSPARENCY;
+    private static final int BAR_FILL_COLOR = 0x00aa00b6;
+
+    private static final double TRANSPARENCY_TWEEN_RATE = 2.5;
+
+    private static double transparency = 0.0;
+
+    private static int getTransparency() {
+        return ((int) (0xb0 * transparency)) << 24;
+    }
+
+    private static int getFillColor() {
+        return BAR_FILL_COLOR | getTransparency();
+    }
+
+    private static int getModulateColor() {
+        return 0x00ffffff | getTransparency();
+    }
+
+
+    public static double currentVal = 0.0;
 
     @SubscribeEvent
     public static void onGuiRender(RenderGuiEvent.Post event) {
@@ -35,14 +56,30 @@ public class OblivionChargeBar {
             return;
         }
 
-        Player player = Minecraft.getInstance().player;
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) {
+            return;
+        }
+
+        final Player player = Minecraft.getInstance().player;
         if (player == null) {
             return;
         }
 
-        final double charge = player.getData(DimensionalWeather.OBLIVION_CHARGE);
+        if (!Minecraft.getInstance().isPaused()) {
+            final double tickRateRatio = level.tickRateManager().tickrate() / 20.0;
+            final double delta = (event.getPartialTick().getRealtimeDeltaTicks() / 20.0f) * tickRateRatio;
 
-        if (charge == 0.0) {
+            final double charge = player.getData(DimensionalWeather.OBLIVION_CHARGE);
+            final double chargeFillRate = OblivionWeather.aboveVoid ? Config.OBLIVION_FILL_RATE.get() : -Config.OBLIVION_FILL_RATE.get();
+            final double chargeFillDelta = chargeFillRate * delta;
+            currentVal = Math.clamp(currentVal + chargeFillDelta, 0.0, 1.0);
+
+            final double transparencyFillRate = TRANSPARENCY_TWEEN_RATE * delta * (charge != 0 ? 1.0 : -1.0);
+            transparency = Math.clamp(transparency + transparencyFillRate, 0.0, 1.0);
+        }
+
+        if (transparency == 0.0) {
             return;
         }
 
@@ -50,10 +87,9 @@ public class OblivionChargeBar {
         final int guiWidth = graphics.guiWidth();
         final int guiHeight = graphics.guiHeight();
 
-
         final int barX = (int) (guiWidth * ClientConfig.OBLIVION_BAR_X_POSITION.get());
         final int barY = (int) (guiHeight * ClientConfig.OBLIVION_BAR_Y_POSITION.get());
-        final int filledHeight = (int) (BAR_INSIDE_RECT_HEIGHT * charge);
+        final int filledHeight = (int) (BAR_INSIDE_RECT_HEIGHT * currentVal);
 
         graphics.blit(
             RenderPipelines.GUI_TEXTURED,
@@ -66,7 +102,7 @@ public class OblivionChargeBar {
             BAR_TEXTURE_HEIGHT,
             BAR_TEXTURE_WIDTH,
             BAR_TEXTURE_HEIGHT,
-            0x00ffffff | BAR_TRANSPARENCY
+            getModulateColor()
         );
 
         final int insideX = barX - BAR_TEXTURE_WIDTH / 2 + BAR_INSIDE_RECT_X;
@@ -75,7 +111,7 @@ public class OblivionChargeBar {
             barY - filledHeight / 2,
             insideX + BAR_INSIDE_RECT_WIDTH,
             barY + filledHeight / 2,
-            BAR_FILL_COLOR
+            getFillColor()
         );
     }
 }

@@ -17,7 +17,7 @@ public class Config {
 
     public static final ModConfigSpec.DoubleValue OBLIVION_DAMAGE = BUILDER
         .comment("Damage per second once the Oblivion bar is full")
-        .defineInRange("oblivionDamage", 2.0, 0.0, Double.MAX_VALUE);
+        .defineInRange("oblivionDamage", 4.0, 0.0, Double.MAX_VALUE);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 }

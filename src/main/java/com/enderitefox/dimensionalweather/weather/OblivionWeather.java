@@ -2,6 +2,7 @@ package com.enderitefox.dimensionalweather.weather;
 
 import com.enderitefox.dimensionalweather.Config;
 import com.enderitefox.dimensionalweather.DimensionalWeather;
+import com.enderitefox.dimensionalweather.client.oblivion.OblivionChargeBar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,7 +19,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = DimensionalWeather.MODID)
-class OblivionWeather {
+public class OblivionWeather {
+    public static boolean aboveVoid;
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Level level = event.getEntity().level();
@@ -27,27 +30,32 @@ class OblivionWeather {
             return;
         }
 
-        tickOblivionCharge(event.getEntity());
+        tickOblivionCharge(event.getEntity(), level.isClientSide());
 
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             tickOblivionDamage(serverPlayer);
         }
     }
 
-    public static void tickOblivionCharge(Player player) {
-        boolean oblivionCharges = isAboveVoid(player);
+    public static void tickOblivionCharge(Player player, boolean clientSide) {
+        aboveVoid = isAboveVoid(player);
         double charge = player.getData(DimensionalWeather.OBLIVION_CHARGE);
-        double tickTime = player.level().tickRateManager().millisecondsPerTick() / 1000;
-        if (oblivionCharges) {
-            charge += Config.OBLIVION_FILL_RATE.get() * tickTime;
+        double tickSpeedRatio = player.level().tickRateManager().tickrate() / 20.0;
+        double deltaTime = (1.0 / 20.0) * tickSpeedRatio;
+        if (aboveVoid) {
+            charge += Config.OBLIVION_FILL_RATE.get() * deltaTime;
         }
         else {
-            charge -= Config.OBLIVION_EMPTY_RATE.get() * tickTime;
+            charge -= Config.OBLIVION_EMPTY_RATE.get() * deltaTime;
         }
 
         charge = Math.clamp(charge, 0.0, 1.0);
 
         player.setData(DimensionalWeather.OBLIVION_CHARGE, charge);
+
+        if (clientSide) {
+            OblivionChargeBar.currentVal = charge;
+        }
     }
 
     public static void tickOblivionDamage(ServerPlayer player) {

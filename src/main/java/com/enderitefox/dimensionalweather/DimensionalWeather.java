@@ -2,6 +2,11 @@ package com.enderitefox.dimensionalweather;
 
 import com.enderitefox.dimensionalweather.client.ClientConfig;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageType;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.*;
 import org.slf4j.Logger;
@@ -32,6 +37,11 @@ public class DimensionalWeather {
     // Serialization via map codec
     public static final Supplier<AttachmentType<Double>> OBLIVION_CHARGE = ATTACHMENT_TYPES.register(
         "oblivion_charge", () -> AttachmentType.builder(() -> 0.0).serialize(Codec.DOUBLE.fieldOf("oblivion_charge")).build()
+    );
+
+    public static final ResourceKey<DamageType> OBLIVION_DAMAGE = ResourceKey.create(
+        Registries.DAMAGE_TYPE,
+        Identifier.fromNamespaceAndPath(MODID, "oblivion")
     );
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.

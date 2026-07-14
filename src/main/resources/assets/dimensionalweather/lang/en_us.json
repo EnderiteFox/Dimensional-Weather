@@ -7,4 +7,5 @@
   "dimensionalweather.configuration.oblivionDamage": "Oblivion damage",
   "dimensionalweather.configuration.oblivionBarXPos": "Oblivion bar X position",
   "dimensionalweather.configuration.oblivionBarYPos": "Oblivion bar Y position"
+  "death.attack.dimensionalweather.oblivion": "%1$s was obliterated"
 }

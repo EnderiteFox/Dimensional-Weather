@@ -6,7 +6,6 @@ import com.enderitefox.dimensionalweather.client.oblivion.OblivionChargeBar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -72,7 +71,7 @@ public class OblivionWeather {
                         .level()
                         .registryAccess()
                         .lookupOrThrow(Registries.DAMAGE_TYPE)
-                        .getOrThrow(DamageTypes.FELL_OUT_OF_WORLD),
+                        .getOrThrow(DimensionalWeather.OBLIVION_DAMAGE),
                     null,
                     null,
                     player.getEyePosition().add(0, -10, 0)

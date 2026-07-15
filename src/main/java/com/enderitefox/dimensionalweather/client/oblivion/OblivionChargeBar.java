@@ -71,7 +71,7 @@ public class OblivionChargeBar {
             final double delta = (event.getPartialTick().getRealtimeDeltaTicks() / 20.0f) * tickRateRatio;
 
             final double charge = player.getData(DimensionalWeather.OBLIVION_CHARGE);
-            final double chargeFillRate = OblivionWeather.aboveVoid ? Config.OBLIVION_FILL_RATE.get() : -Config.OBLIVION_FILL_RATE.get();
+            final double chargeFillRate = OblivionWeather.aboveVoid ? Config.OBLIVION_FILL_RATE.get() : -Config.OBLIVION_EMPTY_RATE.get();
             final double chargeFillDelta = chargeFillRate * delta;
             currentVal = Math.clamp(currentVal + chargeFillDelta, 0.0, 1.0);
 

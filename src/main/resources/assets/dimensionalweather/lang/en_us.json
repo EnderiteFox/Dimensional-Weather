@@ -13,5 +13,6 @@
   "dimensionalweather.configuration.oblivionBarXPos.tooltip": "The X position of the Oblivion bar as a percentage of the screen",
   "dimensionalweather.configuration.oblivionBarYPos": "Oblivion bar Y position",
   "dimensionalweather.configuration.oblivionBarYPos.tooltip": "The Y position of the Oblivion bar as a percentage of the screen",
-  "death.attack.dimensionalweather.oblivion": "%1$s was obliterated"
+  "death.attack.dimensionalweather.oblivion": "%1$s was obliterated",
+  "enchantment.dimensionalweather.deflect": "Deflect"
 }

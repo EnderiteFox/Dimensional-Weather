@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.*;
 import org.slf4j.Logger;
@@ -42,6 +42,11 @@ public class DimensionalWeather {
     public static final ResourceKey<DamageType> OBLIVION_DAMAGE = ResourceKey.create(
         Registries.DAMAGE_TYPE,
         Identifier.fromNamespaceAndPath(MODID, "oblivion")
+    );
+
+    public static final ResourceKey<Enchantment> DEFLECT_ENCHANTMENT = ResourceKey.create(
+        Registries.ENCHANTMENT,
+        Identifier.fromNamespaceAndPath(MODID, "deflect")
     );
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
